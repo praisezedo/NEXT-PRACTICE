@@ -1,10 +1,11 @@
 
 import { PrismaClient } from "@prisma/client";
+
 const prisma = new PrismaClient()
 const technologyBuilders = async () => {
 const count = await prisma.user.count();
     if (count === 0) {
-       await  prisma.user.createMany({
+       await prisma.user.createMany({
             data: [
              {name: 'Praise' , email: 'praise@gmail.com', engineering: 'software engineering'},
              {name: 'emmaneul' , email: 'emmaneul@gmail.com', engineering: 'mechatronics engineering'},
@@ -45,4 +46,6 @@ export async function deleteEngineer(id: number) {
 await new Promise((resolve) => setTimeout(resolve , 1500))
    return prisma.user.delete({where: {id}})
 }
+
+
 
