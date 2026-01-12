@@ -1,22 +1,25 @@
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
-export function addTaskT(task: string) {
-    let tasks = displayTaskT();
-    tasks.push(task);
-    localStorage.setItem('taskT', JSON.stringify(tasks));
+interface TaskStore {
+  tasks: string[];
+  addTask: (task: string) => void;
+  deleteTask: (id: number) => void;
 }
-export function displayTaskT() {
-    if (typeof window !== 'undefined') {
-        const stored = localStorage.getItem('taskT');
-        return stored ? JSON.parse(stored) as string[] : [];
+
+export const useTaskStore = create<TaskStore>()(
+  persist(
+    (set) => ({
+      tasks: [],
+      addTask: (task: string) => set((state) => ({ tasks: [...state.tasks, task]})),
+      deleteTask: (id: number) => set((state) => ({ tasks: state.tasks.filter((_, i) => i !== id) })),
+    }),
+    {
+      name: 'task-storage',
     }
-    return [];
-}
+  )
+);
 
-export function deleteTask(id: number) {
-    let tasks = displayTaskT();
-    tasks.splice(id, 1);
-    localStorage.setItem('taskT', JSON.stringify(tasks));
-}
 
 
 
